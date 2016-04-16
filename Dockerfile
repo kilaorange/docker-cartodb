@@ -1,6 +1,8 @@
 FROM ubuntu:12.04.5
+
+#  'exit 101' updated to exit status 0
 RUN echo '#!/bin/sh' > /usr/sbin/policy-rc.d \
-&& echo 'exit 101' >> /usr/sbin/policy-rc.d \
+&& echo 'exit 0' >> /usr/sbin/policy-rc.d \
 && chmod +x /usr/sbin/policy-rc.d \
 && dpkg-divert --local --rename --add /sbin/initctl \
 && cp -a /usr/sbin/policy-rc.d /sbin/initctl \
@@ -13,7 +15,7 @@ RUN echo '#!/bin/sh' > /usr/sbin/policy-rc.d \
 && echo 'Acquire::GzipIndexes "true"; Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/docker-gzip-indexes \
 &&  locale-gen en_US.UTF-8 \
 &&  update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
-&& apt-get clean && apt-get update -y && apt-get -y install autoconf binutils-doc bison build-essential flex git python-software-properties
+&& apt-get clean && apt-get update -y && apt-get -y install --fix-missing software-properties-common  autoconf binutils-doc bison build-essential flex git python-software-properties apt-utils 
 
 RUN add-apt-repository -y ppa:cartodb/base \
 && add-apt-repository -y ppa:cartodb/gis \
